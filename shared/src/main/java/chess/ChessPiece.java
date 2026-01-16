@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,6 +63,12 @@ public class ChessPiece {
             
             return basicMoves(board, myPosition, myDirections, true);
         }
+        if (piece.getPieceType() == PieceType.ROOK) {
+            int [][] myDirection = new int[][] {
+                {1,0}, {-1, 0}, {0,1}, {0,-1}
+            };
+            return basicMoves(board, myPosition, myDirection, true);
+        }
         
         return List.of();
     }
@@ -70,11 +77,11 @@ public class ChessPiece {
         
         // each item in my direction
         
-        List<ChessMove> moves = List.of();
+        List<ChessMove> moves = new ArrayList<>();
 
         ChessPiece me = board.getPiece(myPosition);
         if (me == null) {return moves;}
-
+        
         for (int[] d : myDirections) {
             int row = myPosition.getRow() + d[0];
             int col = myPosition.getColumn() + d[1];
