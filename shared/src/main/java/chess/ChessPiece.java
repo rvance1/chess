@@ -69,6 +69,20 @@ public class ChessPiece {
             };
             return basicMoves(board, myPosition, myDirection, true);
         }
+        if (piece.getPieceType() == PieceType.QUEEN) {
+            int[][] myDirection = new int [][] {
+                {1, 1}, {1, -1}, {-1, 1}, {-1, -1},
+                {1,0}, {-1, 0}, {0,1}, {0,-1}
+            };
+            return basicMoves(board, myPosition, myDirection, true);
+        }
+        if (piece.getPieceType() == PieceType.KNIGHT) {
+            int[][] myDirection = new int[][] {
+                {2,1}, {2,-1}, {-2,1}, {-2,-1},
+                {1,2}, {1,-2}, {-1,2}, {-1,-2}
+            };
+            return basicMoves(board, myPosition, myDirection, false);
+        }
         
         return List.of();
     }
