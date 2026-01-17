@@ -60,7 +60,7 @@ public class ChessBoard {
                 Arrays.fill(tiles[r], null);
             }
 
-            // White back rank (row 1 => index 0)
+            // White back rank 
             tiles[0][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
             tiles[0][1] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
             tiles[0][2] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
@@ -70,17 +70,17 @@ public class ChessBoard {
             tiles[0][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
             tiles[0][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
 
-            // White pawns (row 2 => index 1)
+            // White pawns
             for (int c = 0; c < 8; c++) {
                 tiles[1][c] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
             }
 
-            // Black pawns (row 7 => index 6)
+            // Black pawns
             for (int c = 0; c < 8; c++) {
                 tiles[6][c] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
             }
 
-            // Black back rank (row 8 => index 7)
+            // Black back rank
             tiles[7][0] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
             tiles[7][1] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
             tiles[7][2] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
