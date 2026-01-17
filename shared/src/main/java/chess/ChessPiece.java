@@ -60,34 +60,79 @@ public class ChessPiece {
             int[][] myDirections = new int[][] {
                 {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
             };
-            
-            return basicMoves(board, myPosition, myDirections, true);
+            return basicMoves(board, myPosition, myDirections, true, false);
         }
         if (piece.getPieceType() == PieceType.ROOK) {
             int [][] myDirection = new int[][] {
                 {1,0}, {-1, 0}, {0,1}, {0,-1}
             };
-            return basicMoves(board, myPosition, myDirection, true);
+            return basicMoves(board, myPosition, myDirection, true, false);
         }
         if (piece.getPieceType() == PieceType.QUEEN) {
             int[][] myDirection = new int [][] {
                 {1, 1}, {1, -1}, {-1, 1}, {-1, -1},
                 {1,0}, {-1, 0}, {0,1}, {0,-1}
             };
-            return basicMoves(board, myPosition, myDirection, true);
+            return basicMoves(board, myPosition, myDirection, true, false);
         }
         if (piece.getPieceType() == PieceType.KNIGHT) {
             int[][] myDirection = new int[][] {
                 {2,1}, {2,-1}, {-2,1}, {-2,-1},
                 {1,2}, {1,-2}, {-1,2}, {-1,-2}
             };
-            return basicMoves(board, myPosition, myDirection, false);
+            return basicMoves(board, myPosition, myDirection, false, false);
         }
+        if (piece.getPieceType() == PieceType.KING) {
+            int[][] myDirection = new int[][] {
+                {1, 1}, {1, -1}, {-1, 1}, {-1, -1},
+                {1,0}, {-1, 0}, {0,1}, {0,-1}
+            };
+            return basicMoves(board, myPosition, myDirection, false, false);
+        }
+        if (piece.getPieceType() == PieceType.PAWN) {
+            List<ChessMove> moves = new ArrayList<>();
+
+            int direction = piece.pieceColor == ChessGame.TeamColor.WHITE ? 1 : -1;
+            int starting_row = piece.pieceColor == ChessGame.TeamColor.WHITE ? 2 : 7;
+
+            int[][] myDirections;
+            
+            //forward moves
+            if (myPosition.getRow() == starting_row) {
+                myDirections = new int[][] {
+                    {direction,0}, {direction,1,1}, {direction,-1,1}
+                };
+                moves.addAll(basicMoves(board, myPosition, myDirections, true, true));
+            } else {
+                myDirections = new int[][] {
+                    {direction,0}, {direction,1,1}, {direction,-1,1}
+                };
+                moves.addAll(basicMoves(board, myPosition, myDirections, false, true));
+            }
+            
+            int end_row = (direction + 1)/2 * 7 + 1;
+
+            List<ChessMove> promotionMoves = new ArrayList<>();
+            for (ChessMove move : moves) {
+                if (move.getEndPosition().getRow() == end_row) {
+                    promotionMoves.add(new ChessMove(move.getStartPosition(), move.getEndPosition(), PieceType.QUEEN));
+                    promotionMoves.add(new ChessMove(move.getStartPosition(), move.getEndPosition(), PieceType.ROOK));
+                    promotionMoves.add(new ChessMove(move.getStartPosition(), move.getEndPosition(), PieceType.BISHOP));
+                    promotionMoves.add(new ChessMove(move.getStartPosition(), move.getEndPosition(), PieceType.KNIGHT));
+                }
+            }
+            if (!promotionMoves.isEmpty()) {
+                return promotionMoves;
+            } else {
+                return moves;
+            }
+        }
+
         
         return List.of();
     }
 
-    public Collection<ChessMove> basicMoves(ChessBoard board, ChessPosition myPosition, int[][] myDirections, Boolean repeatable) {
+    public Collection<ChessMove> basicMoves(ChessBoard board, ChessPosition myPosition, int[][] myDirections, Boolean repeatable, Boolean isPawn) {
         
         // each item in my direction
         
@@ -100,25 +145,37 @@ public class ChessPiece {
             int row = myPosition.getRow() + d[0];
             int col = myPosition.getColumn() + d[1];
 
+            int i = 0;
             while(isOnBoard(row, col)) {
                 //look at tile
                 ChessPosition target = new ChessPosition(row, col);
                 ChessPiece squatter = board.getPiece(target);
 
                 if (squatter == null) {
+                    if (d[0] == 0 && d[1] == 0) {
+                        break;
+                    }
+                    if (d.length == 3) {
+                        break;
+                    }
                     moves.add(new ChessMove(myPosition, target, null));
                 } else {
-                    if (squatter.getTeamColor() != me.getTeamColor()) {
+                    if (squatter.getTeamColor() != me.getTeamColor() && (!isPawn || d.length == 3)) {
                         moves.add(new ChessMove(myPosition, target, null));
                     }
+
                     break;
                 }
-                if (!repeatable) {
+                if (!repeatable || d.length == 3) {
+                    break;
+                }
+                if (isPawn && i >= 1) {
                     break;
                 }
 
                 row += d[0];
                 col += d[1];
+                i ++;
             }
         }
 
