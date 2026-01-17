@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -30,6 +31,22 @@ public class ChessPiece {
         KNIGHT,
         ROOK,
         PAWN
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {return true;}
+        if (!(o instanceof ChessPiece)) {return false;}
+
+        ChessPiece other = (ChessPiece) o;
+
+        return Objects.equals(this.pieceColor, other.pieceColor) &&
+           Objects.equals(this.type, other.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
     }
 
     /**

@@ -1,16 +1,17 @@
 package passoff.chess;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
 
 public class ChessBoardTests extends EqualsTestingUtility<ChessBoard> {
     public ChessBoardTests() {
