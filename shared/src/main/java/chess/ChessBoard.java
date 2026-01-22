@@ -45,9 +45,13 @@ public class ChessBoard {
      *
      * @param position The position to get the piece from
      * @return Either the piece at the position, or null if no piece is at that
-     * position
+     * position`
      */
     public ChessPiece getPiece(ChessPosition position) {
+        if (position.getColumn() < 1 || position.getColumn() > 8 ||
+            position.getRow() < 1 || position.getRow() > 8) {
+            return null;
+        }
         return tiles[position.getRow()-1][position.getColumn()-1];
     }
 

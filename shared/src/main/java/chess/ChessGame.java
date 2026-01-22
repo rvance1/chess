@@ -10,9 +10,13 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    public ChessBoard board;
+    
     public ChessGame() {
-
+        board = new ChessBoard();
+        board.resetBoard(); // Initialize the board to the starting position
     }
+    
 
     /**
      * @return Which team's turn it is
