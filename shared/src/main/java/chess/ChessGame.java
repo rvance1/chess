@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -11,10 +12,12 @@ import java.util.Collection;
 public class ChessGame {
 
     public ChessBoard board;
+    public TeamColor currentTurn;
     
     public ChessGame() {
         board = new ChessBoard();
         board.resetBoard(); // Initialize the board to the starting position
+        currentTurn = TeamColor.WHITE;
     }
     
 
@@ -22,7 +25,7 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return currentTurn;
     }
 
     /**
@@ -31,8 +34,36 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        currentTurn = team;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + Objects.hashCode(this.board);
+        hash = 53 * hash + Objects.hashCode(this.currentTurn);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ChessGame other = (ChessGame) obj;
+        if (!Objects.equals(this.board, other.board)) {
+            return false;
+        }
+        return this.currentTurn == other.currentTurn;
+    }
+
+    
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -109,6 +140,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return board;
     }
 }
