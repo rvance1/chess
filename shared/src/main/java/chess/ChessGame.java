@@ -101,7 +101,90 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPos = findKing(teamColor);
+        return isPositionThreatened(kingPos, teamColor);
+    }
+
+    private boolean isPositionThreatened(ChessPosition position, TeamColor color) {
+
+        int direction = color == TeamColor.WHITE ? 1 : -1;
+
+        int[][] directionsBish = new int[][] {
+            {1,0},{-1,0},{0,1},{0,-1}, 
+        };
+        int[][] directionsRook = new int[][] {
+            {1,0},{-1,0},{0,1},{0,-1}, 
+        };
+        int[][] directionsHorse = new int[][] {
+            {2,1},{2,-1},{-2,1},{-2,-1},
+            {1,2},{1,-2},{-1,2},{-1,-2},
+        };
+        int[][] directionsPawn = new int[][] {
+            {direction,1}, {direction,-1}
+        };
+
+        if (checkMoves(position, ChessPiece.PieceType.BISHOP, directionsBish, true)) {return true;}
+        if (checkMoves(position, ChessPiece.PieceType.QUEEN, directionsBish, true)) {return true;}
+        if (checkMoves(position, ChessPiece.PieceType.ROOK, directionsRook, true)) {return true;}
+        if (checkMoves(position, ChessPiece.PieceType.QUEEN, directionsRook, true)) {return true;}
+
+        if (checkMoves(position, ChessPiece.PieceType.KNIGHT, directionsHorse, false)) {return true;}
+
+        if (checkMoves(position, ChessPiece.PieceType.KING, directionsBish, false)) {return true;}
+        if (checkMoves(position, ChessPiece.PieceType.KING, directionsRook, false)) {return true;}
+
+        return checkMoves(position, ChessPiece.PieceType.PAWN, directionsPawn, true);
+
+    }
+
+    private boolean checkMoves(ChessPosition startpos, ChessPiece.PieceType type, int[][] moves, boolean isRepeating) {
+        
+        ChessPiece me = this.board.getPiece(startpos);
+
+        for (int[] d: moves) {
+            
+            int row = startpos.getRow();
+            int col = startpos.getColumn();
+            
+            while(isOnBoard(row, col)) {
+                row += d[0];
+                col += d[1];
+
+                ChessPosition target = new ChessPosition(row, col);
+                ChessPiece squatter = this.board.getPiece(target);
+
+                if (squatter != null) {
+                    if (squatter.getPieceType() == type && squatter.getTeamColor() != me.getTeamColor()) {
+                        return true;
+                    }
+                    break;
+                }
+
+                if (!isRepeating) {
+                    break;
+                }
+            }
+
+
+        }
+        return false;
+    }
+
+    private boolean isOnBoard(int row, int col) {
+        return row >= 1 && row <= 8 && col >= 1 && col <= 8;
+    }
+    
+    private ChessPosition findKing(TeamColor teamColor) {
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(pos);
+                if (piece != null && piece.getTeamColor() == teamColor && piece.getPieceType() == ChessPiece.PieceType.KING) {
+                    return pos;
+                }
+            }
+        }
+        return null;
     }
 
     /**
