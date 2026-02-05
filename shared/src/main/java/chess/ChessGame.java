@@ -94,11 +94,11 @@ public class ChessGame {
             ChessGame newGame = new ChessGame();
             newGame.setBoard(newBoard);
             if (!newGame.isInCheck(me.getTeamColor())) {
-                // this move is valid
+                validMoves.add(move);
             }
         
         }
-        return null;
+        return validMoves;
     }
     private ChessBoard simulateMove(ChessMove move) {
         ChessBoard newBoard = new ChessBoard();
@@ -136,7 +136,26 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
+        if (validMoves == null || !validMoves.contains(move)) {
+            throw new InvalidMoveException("Invalid move: " + move.toString());
+        }
+
+        // Perform the move
+        ChessPiece movingPiece = this.board.getPiece(move.getStartPosition());
+        // clear the start
+        this.board.addPiece(move.getStartPosition(), null);
+        if (movingPiece != null) {
+            ChessPiece.PieceType promotion = move.getPromotionPiece();
+            if (promotion != null) {
+                this.board.addPiece(move.getEndPosition(), new ChessPiece(movingPiece.getTeamColor(), promotion));
+            } else {
+                this.board.addPiece(move.getEndPosition(), movingPiece);
+            }
+        }
+
+        // Switch turns
+        currentTurn = (currentTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
     }
 
     /**
