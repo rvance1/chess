@@ -271,7 +271,7 @@ public class ChessGame {
 
                 ChessPosition pos = new ChessPosition(row, col);
                 ChessPiece piece = board.getPiece(pos);
-                
+
                 if (piece != null && piece.getTeamColor() == teamColor) {
                     Collection<ChessMove> moves = validMoves(pos);
                     if (moves != null && !moves.isEmpty()) {
@@ -296,7 +296,7 @@ public class ChessGame {
             return false;
         }
 
-        // Check if any piece for the team has at least one legal move
+        // Check if any piece on the team has a move
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
 
