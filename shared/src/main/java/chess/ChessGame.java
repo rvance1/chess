@@ -137,7 +137,10 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
-        if (validMoves == null || !validMoves.contains(move)) {
+        if (validMoves == null || 
+        !validMoves.contains(move) || 
+        this.board.getPiece(move.getStartPosition()) == null || 
+        this.board.getPiece(move.getStartPosition()).getTeamColor() != currentTurn) {
             throw new InvalidMoveException("Invalid move: " + move.toString());
         }
 
@@ -174,10 +177,10 @@ public class ChessGame {
         int direction = color == TeamColor.WHITE ? 1 : -1;
 
         int[][] directionsBish = new int[][] {
-            {1,0},{-1,0},{0,1},{0,-1}, 
+            {1,1},{1,-1},{-1,1},{-1,-1}
         };
         int[][] directionsRook = new int[][] {
-            {1,0},{-1,0},{0,1},{0,-1}, 
+            {1,0},{-1,0},{0,1},{0,-1}
         };
         int[][] directionsHorse = new int[][] {
             {2,1},{2,-1},{-2,1},{-2,-1},
@@ -258,7 +261,26 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        // If the team is not in check, it cant be checkmate
+        if (!isInCheck(teamColor)) {
+            return false;
+        }
+
+        // can any piece moove to get out of check?
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(pos);
+                if (piece != null && piece.getTeamColor() == teamColor) {
+                    Collection<ChessMove> moves = validMoves(pos);
+                    if (moves != null && !moves.isEmpty()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

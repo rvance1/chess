@@ -1,15 +1,16 @@
 package passoff.chess.game;
 
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPosition;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import passoff.chess.TestUtilities;
 
-import java.util.ArrayList;
-import java.util.List;
+import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
+import passoff.chess.TestUtilities;
 
 public class ValidMovesTests {
     private static final String TRAPPED_PIECE_MOVES = "ChessGame validMoves returned valid moves for a trapped piece";
