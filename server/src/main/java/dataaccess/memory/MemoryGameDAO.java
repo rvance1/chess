@@ -22,7 +22,23 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public int createGame(GameData game) throws DataAccessException {
+        if (game == null) {
+            throw new DataAccessException("game cannot be null");
+        }
 
+        int id = nextId.getAndIncrement();
+
+        // Create a new record instance with the assigned id
+        GameData stored = new GameData(
+                id,
+                game.whiteUsername(),
+                game.blackUsername(),
+                game.gameName(),
+                game.game()
+        );
+
+        games.put(id, stored);
+        return id;
     }
 
     @Override
@@ -35,11 +51,18 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public Collection<GameData> listGames() throws DataAccessException {
-        return new ArrayList<>(games.values()); //get a copy
+        return new ArrayList<>(games.values()); // get copy
     }
 
     @Override
     public void updateGame(GameData game) throws DataAccessException {
-
+        if (game == null) {
+            throw new DataAccessException("game cannot be null");
+        }
+        int id = game.gameID();
+        if (!games.containsKey(id)) {
+            throw new DataAccessException("game does not exist");
+        }
+        games.put(id, game);
     }
 }
