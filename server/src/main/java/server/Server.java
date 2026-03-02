@@ -56,6 +56,7 @@ public class Server {
         javalin.post("/session", sessionHandler::login);
         javalin.delete("/session", sessionHandler::logout);
         javalin.post("/game", gameHandler::createGame);
+        javalin.get("/game", gameHandler::listGames);
 
     }
 

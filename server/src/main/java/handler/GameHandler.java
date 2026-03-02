@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import dto.CreateGameRequest;
 import dto.CreateGameResult;
+import dto.ListGamesResult;
 import io.javalin.http.Context;
 import service.GameService;
 
@@ -15,6 +16,16 @@ public class GameHandler {
         this.gameService = gameService;
     }
 
+    public void listGames(Context ctx) {
+        String token = ctx.header("authorization");
+        if (token == null) token = ctx.header("Authorization");
+
+        ListGamesResult res = gameService.listGames(token);
+
+        ctx.status(200);
+        ctx.json(res);
+    }
+    
     public void createGame(Context ctx) {
         String token = ctx.header("authorization");
         if (token == null) {

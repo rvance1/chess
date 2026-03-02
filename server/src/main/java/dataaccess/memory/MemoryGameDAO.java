@@ -28,7 +28,6 @@ public class MemoryGameDAO implements GameDAO {
 
         int id = nextId.getAndIncrement();
 
-        // Create a new record instance with the assigned id
         GameData stored = new GameData(
                 id,
                 game.whiteUsername(),
@@ -51,7 +50,7 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public Collection<GameData> listGames() throws DataAccessException {
-        return new ArrayList<>(games.values()); // get copy
+        return new ArrayList<>(games.values());
     }
 
     @Override

@@ -1,10 +1,14 @@
 package service;
 
+import java.util.List;
+
 import chess.ChessGame;
 import dataaccess.AuthDAO;
 import dataaccess.GameDAO;
 import dto.CreateGameRequest;
 import dto.CreateGameResult;
+import dto.GameListItem;
+import dto.ListGamesResult;
 import exception.DataAccessException;
 import exception.ServiceException;
 import model.AuthData;
@@ -20,6 +24,37 @@ public class GameService {
         this.gameDAO = gameDAO;
     }
 
+    public ListGamesResult listGames(String authToken) {
+        // 1) auth required
+        if (authToken == null || authToken.isBlank()) {
+            throw new ServiceException(401, "Error: unauthorized");
+        }
+
+        try {
+            AuthData auth = authDAO.getAuth(authToken);
+            if (auth == null) {
+                throw new ServiceException(401, "Error: unauthorized");
+            }
+
+            // 2) read all games
+            List<GameListItem> items = gameDAO.listGames().stream()
+                    .map(g -> new GameListItem(
+                            g.gameID(),
+                            g.whiteUsername(),
+                            g.blackUsername(),
+                            g.gameName()
+                    ))
+                    .toList();
+
+            // 3) return in expected wrapper
+            return new ListGamesResult(items);
+
+        } catch (DataAccessException e) {
+            throw new ServiceException(500, "Error: " + e.getMessage());
+        }
+    }
+
+    
     public CreateGameResult createGame(String authToken, CreateGameRequest req) {
         // validate
         if (authToken == null || authToken.isBlank()) {
