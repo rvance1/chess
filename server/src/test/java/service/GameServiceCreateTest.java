@@ -24,7 +24,7 @@ import exception.ServiceException;
 import model.GameData;
 import model.UserData;
 
-public class GameServiceTest {
+public class GameServiceCreateTest {
 
     private UserDAO userDAO;
     private AuthDAO authDAO;
