@@ -7,8 +7,6 @@ import dataaccess.AuthDAO;
 import dataaccess.UserDAO;
 import dto.LoginRequest;
 import dto.LoginResult;
-import exception.AlreadyTakenException;
-import exception.BadRequestException;
 import exception.DataAccessException;
 import exception.ServiceException;
 import handler.results.RegisterResult;
@@ -29,11 +27,11 @@ public class UserService {
             isBlank(req.username()) ||
             isBlank(req.password()) ||
             isBlank(req.email())) {
-            throw new BadRequestException("Error: bad request");
+            throw new ServiceException(400, "Error: bad request");
         }
 
         if (userDAO.getUser(req.username()) != null) {
-            throw new AlreadyTakenException("Error: already taken");
+            throw new ServiceException(403, "Error: already taken");
         }
 
         userDAO.insertUser(req);
@@ -73,6 +71,28 @@ public class UserService {
             throw new ServiceException(500, "Error: " + e.getMessage());
         }
     }
+
+    public void logout(String authToken) {
+    // token check
+    if (authToken == null || authToken.trim().isEmpty()) {
+        throw new ServiceException(401, "Error: unauthorized");
+    }
+
+    try {
+        AuthData auth = authDAO.getAuth(authToken);
+
+        // token not found
+        if (auth == null) {
+            throw new ServiceException(401, "Error: unauthorized");
+        }
+
+        // delete it
+        authDAO.deleteAuth(authToken);
+
+    } catch (DataAccessException e) {
+        throw new ServiceException(500, "Error: " + e.getMessage());
+    }
+}
 
     private boolean isBlank(String s) {
         return s == null || s.isBlank();

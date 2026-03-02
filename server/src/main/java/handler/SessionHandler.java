@@ -16,6 +16,7 @@ public class SessionHandler {
     }
 
     public void login(Context ctx) {
+        // body
         LoginRequest req = gson.fromJson(ctx.body(), LoginRequest.class);
 
         // svc
@@ -23,5 +24,16 @@ public class SessionHandler {
 
         ctx.status(200);
         ctx.json(res);
+    }
+
+    public void logout(Context ctx) {
+        // header
+        String token = ctx.header("Authorization");
+
+        // svc
+        userService.logout(token);
+
+        ctx.status(200);
+        ctx.result("{}");
     }
 }

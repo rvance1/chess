@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import dataaccess.AuthDAO;
+import dataaccess.UserDAO;
 import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryUserDAO;
 import dto.LoginRequest;
@@ -18,8 +20,8 @@ import model.UserData;
 
 public class UserServiceLoginTest {
 
-    private MemoryUserDAO userDAO;
-    private MemoryAuthDAO authDAO;
+    private UserDAO userDAO;
+    private AuthDAO authDAO;
     private UserService userService;
 
     @BeforeEach
@@ -36,7 +38,7 @@ public class UserServiceLoginTest {
     void login_success_returnsToken_andStoresAuth() throws DataAccessException {
         LoginResult res = userService.login(new LoginRequest("kevin", "pw123"));
 
-        // returned data ok
+        // returned data
         assertEquals("kevin", res.username());
         assertNotNull(res.authToken());
         assertFalse(res.authToken().isBlank());
