@@ -30,6 +30,7 @@ public class Server {
 
         //Routes
         javalin.delete("/db", clearHandler::handle);
+        javalin.post("/user", userHandler::register);
 
     }
 
