@@ -1,6 +1,14 @@
 package server;
 
-import io.javalin.*;
+import dataaccess.AuthDAO;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
+import dataaccess.memory.MemoryAuthDAO;
+import dataaccess.memory.MemoryGameDAO;
+import dataaccess.memory.MemoryUserDAO;
+import handler.ClearHandler;
+import io.javalin.Javalin;
+import service.ClearService;
 
 public class Server {
 
@@ -9,7 +17,19 @@ public class Server {
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
-        // Register your endpoints and exception handlers here.
+        //DAOs
+        UserDAO userDAO = new MemoryUserDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+
+        //Services
+        ClearService clearService = new ClearService(userDAO, gameDAO, authDAO);
+
+        //Handlers
+        ClearHandler clearHandler = new ClearHandler(clearService);
+
+        //Routes
+        javalin.delete("/db", clearHandler::handle);
 
     }
 
