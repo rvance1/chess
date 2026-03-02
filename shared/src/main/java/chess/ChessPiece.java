@@ -110,12 +110,12 @@ public class ChessPiece {
             List<ChessMove> moves = new ArrayList<>();
 
             int direction = piece.pieceColor == ChessGame.TeamColor.WHITE ? 1 : -1;
-            int starting_row = piece.pieceColor == ChessGame.TeamColor.WHITE ? 2 : 7;
+            int startingRow = piece.pieceColor == ChessGame.TeamColor.WHITE ? 2 : 7;
 
             int[][] myDirections;
             
             //forward moves
-            if (myPosition.getRow() == starting_row) {
+            if (myPosition.getRow() == startingRow) {
                 myDirections = new int[][] {
                     {direction,0}, {direction,1,1}, {direction,-1,1}
                 };
@@ -127,11 +127,11 @@ public class ChessPiece {
                 moves.addAll(basicMoves(board, myPosition, myDirections, false, true));
             }
             
-            int end_row = (direction + 1)/2 * 7 + 1;
+            int endRow = (direction + 1)/2 * 7 + 1;
 
             List<ChessMove> promotionMoves = new ArrayList<>();
             for (ChessMove move : moves) {
-                if (move.getEndPosition().getRow() == end_row) {
+                if (move.getEndPosition().getRow() == endRow) {
                     promotionMoves.add(new ChessMove(move.getStartPosition(), move.getEndPosition(), PieceType.QUEEN));
                     promotionMoves.add(new ChessMove(move.getStartPosition(), move.getEndPosition(), PieceType.ROOK));
                     promotionMoves.add(new ChessMove(move.getStartPosition(), move.getEndPosition(), PieceType.BISHOP));

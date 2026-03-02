@@ -265,23 +265,7 @@ public class ChessGame {
             return false;
         }
 
-        // can any piece moove to get out of check?
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-
-                ChessPosition pos = new ChessPosition(row, col);
-                ChessPiece piece = board.getPiece(pos);
-
-                if (piece != null && piece.getTeamColor() == teamColor) {
-                    Collection<ChessMove> moves = validMoves(pos);
-                    if (moves != null && !moves.isEmpty()) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
+        return checkOtherMoves(teamColor);
     }
 
     /**
@@ -296,6 +280,10 @@ public class ChessGame {
             return false;
         }
 
+        return checkOtherMoves(teamColor);
+    }
+
+    private boolean checkOtherMoves(TeamColor teamColor) {
         // Check if any piece on the team has a move
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
