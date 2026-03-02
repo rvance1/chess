@@ -7,8 +7,10 @@ import dataaccess.memory.MemoryAuthDAO;
 import dataaccess.memory.MemoryGameDAO;
 import dataaccess.memory.MemoryUserDAO;
 import handler.ClearHandler;
+import handler.UserHandler;
 import io.javalin.Javalin;
 import service.ClearService;
+import service.UserService;
 
 public class Server {
 
@@ -24,10 +26,12 @@ public class Server {
 
         //Services
         ClearService clearService = new ClearService(userDAO, gameDAO, authDAO);
+        UserService userService = new UserService(userDAO, authDAO);
 
         //Handlers
         ClearHandler clearHandler = new ClearHandler(clearService);
-
+        UserHandler userHandler = new UserHandler(userService);
+        
         //Routes
         javalin.delete("/db", clearHandler::handle);
         javalin.post("/user", userHandler::register);
