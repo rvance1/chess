@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import dto.CreateGameRequest;
 import dto.CreateGameResult;
+import dto.JoinGameRequest;
 import dto.ListGamesResult;
 import io.javalin.http.Context;
 import service.GameService;
@@ -38,5 +39,15 @@ public class GameHandler {
 
         ctx.status(200);
         ctx.json(res);
+    }
+
+    public void joinGame(Context ctx) {
+        String authToken = ctx.header("authorization");
+        JoinGameRequest req = gson.fromJson(ctx.body(), JoinGameRequest.class);
+
+        gameService.joinGame(authToken, req);
+
+        ctx.status(200);
+        ctx.result("{}");
     }
 }

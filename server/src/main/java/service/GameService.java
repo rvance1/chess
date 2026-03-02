@@ -8,6 +8,7 @@ import dataaccess.GameDAO;
 import dto.CreateGameRequest;
 import dto.CreateGameResult;
 import dto.GameListItem;
+import dto.JoinGameRequest;
 import dto.ListGamesResult;
 import exception.DataAccessException;
 import exception.ServiceException;
@@ -81,6 +82,60 @@ public class GameService {
         try {
             int gameID = gameDAO.createGame(gameData);
             return new CreateGameResult(gameID);
+        } catch (DataAccessException e) {
+            throw new ServiceException(500, "Error: " + e.getMessage());
+        }
+    }
+
+    public void joinGame(String authToken, JoinGameRequest req) {
+
+        if (authToken == null || authToken.isBlank() || req == null || req.gameID() == null) {
+            throw new ServiceException(400, "Error: bad request");
+        }
+        if (req.playerColor() == null || req.playerColor().isBlank()) {
+            throw new ServiceException(400, "Error: bad request");
+        }
+
+        String color = req.playerColor().trim().toUpperCase();
+        if (!color.equals("WHITE") && !color.equals("BLACK")) {
+            throw new ServiceException(400, "Error: bad request");
+        }
+
+        try {
+            // auth
+            AuthData auth = authDAO.getAuth(authToken);
+            if (auth == null) {
+                throw new ServiceException(401, "Error: unauthorized");
+            }
+            String username = auth.username();
+
+            // game exists
+            GameData game = gameDAO.getGame(req.gameID());
+            if (game == null) {
+                throw new ServiceException(400, "Error: bad request");
+            }
+
+            // join rules
+            String white = game.whiteUsername();
+            String black = game.blackUsername();
+
+            // Seat availability
+            if (color.equals("WHITE")) {
+                if (white != null && !white.equals(username)) {
+                    throw new ServiceException(403, "Error: already taken");
+                }
+                white = username;
+            } else { // BLACK
+                if (black != null && !black.equals(username)) {
+                    throw new ServiceException(403, "Error: already taken");
+                }
+                black = username;
+            }
+
+            // claim
+            GameData updated = new GameData(game.gameID(), white, black, game.gameName(), game.game());
+            gameDAO.updateGame(updated);
+
         } catch (DataAccessException e) {
             throw new ServiceException(500, "Error: " + e.getMessage());
         }

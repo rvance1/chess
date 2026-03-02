@@ -7,11 +7,14 @@ import dataaccess.AuthDAO;
 import dataaccess.UserDAO;
 import dto.LoginRequest;
 import dto.LoginResult;
+import exception.AlreadyTakenException;
+import exception.BadRequestException;
 import exception.DataAccessException;
 import exception.ServiceException;
 import handler.results.RegisterResult;
 import model.AuthData;
 import model.UserData;
+
 
 public class UserService {
     private final UserDAO userDAO;
@@ -27,11 +30,11 @@ public class UserService {
             isBlank(req.username()) ||
             isBlank(req.password()) ||
             isBlank(req.email())) {
-            throw new ServiceException(400, "Error: bad request");
+            throw new BadRequestException("Error: bad request");
         }
 
         if (userDAO.getUser(req.username()) != null) {
-            throw new ServiceException(403, "Error: already taken");
+            throw new AlreadyTakenException("Error: already taken");
         }
 
         userDAO.insertUser(req);
