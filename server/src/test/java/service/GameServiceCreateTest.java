@@ -44,8 +44,8 @@ public class GameServiceCreateTest {
         authDAO.clear();
         gameDAO.clear();
 
-        userService = new UserService(userDAO, authDAO);
         gameService = new GameService(authDAO, gameDAO);
+        userService = new UserService(userDAO, authDAO);
     }
 
     @Test
