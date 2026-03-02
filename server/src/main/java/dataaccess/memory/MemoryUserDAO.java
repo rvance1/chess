@@ -3,8 +3,8 @@ package dataaccess.memory;
 import java.util.HashMap;
 import java.util.Map;
 
-import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
+import exception.DataAccessException;
 import model.UserData;
 
 public class MemoryUserDAO implements UserDAO {

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dataaccess.AuthDAO;
-import dataaccess.DataAccessException;
+import exception.DataAccessException;
 import model.AuthData;
 
 public class MemoryAuthDAO implements AuthDAO {

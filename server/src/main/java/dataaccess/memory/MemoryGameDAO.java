@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
+import exception.DataAccessException;
 import model.GameData;
 
 public class MemoryGameDAO implements GameDAO {

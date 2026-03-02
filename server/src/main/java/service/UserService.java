@@ -1,11 +1,16 @@
 package service;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import dataaccess.AuthDAO;
 import dataaccess.UserDAO;
+import dto.LoginRequest;
+import dto.LoginResult;
 import exception.AlreadyTakenException;
 import exception.BadRequestException;
+import exception.DataAccessException;
+import exception.ServiceException;
 import handler.results.RegisterResult;
 import model.AuthData;
 import model.UserData;
@@ -37,6 +42,36 @@ public class UserService {
         authDAO.createAuth(new AuthData(token, req.username()));
 
         return new RegisterResult(req.username(), token);
+    }
+
+    public LoginResult login(LoginRequest req) {
+        // basic req check
+        if (req == null || isBlank(req.username()) || isBlank(req.password())) {
+            throw new ServiceException(400, "Error: bad request");
+        }
+
+        try {
+            UserData user = userDAO.getUser(req.username());
+
+            // no user
+            if (user == null) {
+                throw new ServiceException(401, "Error: unauthorized");
+            }
+
+            // pw wrong
+            if (!Objects.equals(req.password(), user.password())) {
+                throw new ServiceException(401, "Error: unauthorized");
+            }
+
+            // new token per login
+            String token = UUID.randomUUID().toString(); // quick token gen
+            authDAO.createAuth(new AuthData(token, user.username()));
+
+            return new LoginResult(user.username(), token);
+
+        } catch (DataAccessException e) {
+            throw new ServiceException(500, "Error: " + e.getMessage());
+        }
     }
 
     private boolean isBlank(String s) {

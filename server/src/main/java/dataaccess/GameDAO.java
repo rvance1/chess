@@ -2,6 +2,7 @@ package dataaccess;
 
 import java.util.Collection;
 
+import exception.DataAccessException;
 import model.GameData;
 
 public interface GameDAO {

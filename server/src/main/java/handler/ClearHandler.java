@@ -2,7 +2,7 @@ package handler;
 
 import java.util.Map;
 
-import dataaccess.DataAccessException;
+import exception.DataAccessException;
 import io.javalin.http.Context;
 import service.ClearService;
 
