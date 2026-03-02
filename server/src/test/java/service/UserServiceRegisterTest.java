@@ -16,7 +16,7 @@ import exception.BadRequestException;
 import handler.results.RegisterResult;
 import model.UserData;
 
-public class UserServiceTest {
+public class UserServiceRegisterTest {
 
     private UserDAO userDAO;
     private AuthDAO authDAO;
