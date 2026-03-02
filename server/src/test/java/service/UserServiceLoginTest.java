@@ -35,7 +35,7 @@ public class UserServiceLoginTest {
     }
 
     @Test
-    void login_success_returnsToken_andStoresAuth() throws DataAccessException {
+    void loginSuccessReturnsTokenAndStoresAuth() throws DataAccessException {
         LoginResult res = userService.login(new LoginRequest("kevin", "pw123"));
 
         // returned data
@@ -51,7 +51,7 @@ public class UserServiceLoginTest {
     }
 
     @Test
-    void login_wrongPassword_throws401() {
+    void loginWrongPasswordThrows401() {
         ServiceException ex = assertThrows(ServiceException.class,
                 () -> userService.login(new LoginRequest("kevin", "nope")));
 
@@ -59,7 +59,7 @@ public class UserServiceLoginTest {
     }
 
     @Test
-    void login_unknownUser_throws401() {
+    void loginUnknownUserThrows401() {
         ServiceException ex = assertThrows(ServiceException.class,
                 () -> userService.login(new LoginRequest("ghost", "pw123")));
 
@@ -67,7 +67,7 @@ public class UserServiceLoginTest {
     }
 
     @Test
-    void login_blankUsername_throws400() {
+    void loginBlankUsernameThrows400() {
         ServiceException ex = assertThrows(ServiceException.class,
                 () -> userService.login(new LoginRequest("   ", "pw123")));
 

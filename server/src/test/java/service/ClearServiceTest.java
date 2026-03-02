@@ -18,7 +18,7 @@ import model.UserData;
 
 class ClearServiceTest {
     @Test
-    void clear_clearsAllDAOs() throws Exception {
+    void clearClearsAllDAOs() throws Exception {
         // arrange
         UserDAO userDAO = new MemoryUserDAO();
         GameDAO gameDAO = new MemoryGameDAO();

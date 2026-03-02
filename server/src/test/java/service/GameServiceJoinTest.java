@@ -55,7 +55,7 @@ public class GameServiceJoinTest {
     }
 
     @Test
-    void joinGame_claimWhite_success() throws Exception {
+    void joinGameClaimWhiteSuccess() throws Exception {
         makeUserAndToken("u1", "t1");
         int gameID = makeGame("g1");
 
@@ -66,7 +66,7 @@ public class GameServiceJoinTest {
     }
 
     @Test
-    void joinGame_whiteAlreadyTaken_throws403() throws Exception {
+    void joinGameWhiteAlreadyTakenThrows403() throws Exception {
         makeUserAndToken("u1", "t1");
         makeUserAndToken("u2", "t2");
         int gameID = makeGame("g1");

@@ -42,7 +42,7 @@ public class GameServiceListTest {
     }
 
     @Test
-    void listGames_success_returnsCreatedGames() throws Exception {
+    void listGamesSuccessReturnsCreatedGames() throws Exception {
         var reg = userService.register(new UserData("u", "p", "e"));
         String token = reg.authToken();
 
@@ -59,7 +59,7 @@ public class GameServiceListTest {
     }
 
     @Test
-    void listGames_unauthorized_missingToken() {
+    void listGamesUnauthorizedMissingToken() {
         ServiceException ex = assertThrows(ServiceException.class, () -> gameService.listGames(null));
         assertEquals("Error: unauthorized", ex.getMessage());
     }

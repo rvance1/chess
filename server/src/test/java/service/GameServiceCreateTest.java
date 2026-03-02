@@ -49,7 +49,7 @@ public class GameServiceCreateTest {
     }
 
     @Test
-    void createGame_success_createsGameAndReturnsId() throws Exception {
+    void createGameSuccessCreatesGameAndReturnsId() throws Exception {
         // register for token
         UserData newUser = new UserData("kevin", "pw", "email");
         var regRes = userService.register(newUser);
@@ -75,7 +75,7 @@ public class GameServiceCreateTest {
     }
 
     @Test
-    void createGame_unauthorized_whenTokenMissing() {
+    void createGameUnauthorizedWhenTokenMissing() {
         ServiceException ex = assertThrows(ServiceException.class, () ->
                 gameService.createGame(null, new CreateGameRequest("my game"))
         );
@@ -86,7 +86,7 @@ public class GameServiceCreateTest {
     }
 
     @Test
-    void createGame_unauthorized_whenTokenInvalid() {
+    void createGameUnauthorizedWhenTokenInvalid() {
         String fakeToken = UUID.randomUUID().toString();
 
         ServiceException ex = assertThrows(ServiceException.class, () ->
@@ -99,7 +99,7 @@ public class GameServiceCreateTest {
     }
 
     @Test
-    void createGame_badRequest_whenGameNameBlank() throws Exception {
+    void createGameBadRequestWhenGameNameBlank() throws Exception {
         // get token
         UserData newUser = new UserData("kevin", "pw", "email");
         var regRes = userService.register(newUser);
