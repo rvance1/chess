@@ -3,10 +3,11 @@ package server;
 import dataaccess.AuthDAO;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
-import dataaccess.memory.MemoryAuthDAO;
-import dataaccess.memory.MemoryGameDAO;
-import dataaccess.memory.MemoryUserDAO;
+import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlGameDAO;
+import dataaccess.sql.MySqlUserDAO;
 import dto.ErrorMessage;
+import exception.DataAccessException;
 import exception.ServiceException;
 import handler.ClearHandler;
 import handler.GameHandler;
@@ -35,9 +36,17 @@ public class Server {
         });
 
         //DAOs
-        UserDAO userDAO = new MemoryUserDAO();
-        GameDAO gameDAO = new MemoryGameDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        UserDAO userDAO;
+        GameDAO gameDAO;
+        AuthDAO authDAO;
+
+        try {
+            userDAO = new MySqlUserDAO();
+            gameDAO = new MySqlGameDAO();
+            authDAO = new MySqlAuthDAO();
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Failed to initialize DAOs", e);
+}
 
         //Services
         ClearService clearService = new ClearService(userDAO, gameDAO, authDAO);
