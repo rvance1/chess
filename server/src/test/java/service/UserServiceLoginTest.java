@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import dataaccess.AuthDAO;
 import dataaccess.UserDAO;
@@ -31,7 +32,8 @@ public class UserServiceLoginTest {
         userService = new UserService(userDAO, authDAO);
 
         // user in db
-        userDAO.insertUser(new UserData("kevin", "pw123", "k@x.com"));
+        String hashedPassword = BCrypt.hashpw("pw123", BCrypt.gensalt());
+        userDAO.insertUser(new UserData("kevin", hashedPassword, "k@x.com"));
     }
 
     @Test

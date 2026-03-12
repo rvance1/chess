@@ -61,7 +61,14 @@ public class UserService {
             }
 
             // pw wrong
-            if (!BCrypt.checkpw(req.password(), user.password())) {
+            boolean passwordMatches;
+            try {
+                passwordMatches = BCrypt.checkpw(req.password(), user.password());
+            } catch (IllegalArgumentException e) {
+                throw new ServiceException(401, "Error: unauthorized");
+            }
+
+            if (!passwordMatches) {
                 throw new ServiceException(401, "Error: unauthorized");
             }
 
