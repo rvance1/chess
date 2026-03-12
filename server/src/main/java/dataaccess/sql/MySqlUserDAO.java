@@ -17,6 +17,17 @@ public class MySqlUserDAO implements UserDAO {
 
     @Override
     public void clear() throws DataAccessException {
+
+        String sql = "DELETE FROM user";
+
+        try (Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error clearing users", e);
+        }
     }
 
     @Override
