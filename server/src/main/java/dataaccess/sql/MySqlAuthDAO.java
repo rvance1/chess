@@ -1,18 +1,18 @@
 package dataaccess.sql;
 
-import exception.DataAccessException;
-import model.AuthData;
-import dataaccess.AuthDAO;
-import dataaccess.DatabaseManager;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SqlAuthDAO implements AuthDAO {
+import dataaccess.AuthDAO;
+import dataaccess.DatabaseManager;
+import exception.DataAccessException;
+import model.AuthData;
 
-    public SqlAuthDAO() throws DataAccessException {
+public class MySqlAuthDAO implements AuthDAO {
+
+    public MySqlAuthDAO() throws DataAccessException {
         DatabaseManager.configureDatabase();
     }
 
