@@ -76,6 +76,7 @@ public class MySqlAuthDAO implements AuthDAO {
             ps.executeUpdate();
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DataAccessException("failed to update auth table", ex);
         }
     }

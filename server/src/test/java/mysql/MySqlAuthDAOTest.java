@@ -9,17 +9,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlUserDAO;
 import exception.DataAccessException;
 import model.AuthData;
+import model.UserData;
 
 public class MySqlAuthDAOTest {
 
     private MySqlAuthDAO authDAO;
+    private MySqlUserDAO userDAO;
 
     @BeforeEach
     public void setup() throws DataAccessException {
         authDAO = new MySqlAuthDAO();
+        userDAO = new MySqlUserDAO();
+
         authDAO.clear();
+        userDAO.clear();
+
+        userDAO.insertUser(new UserData("bob", "password", "bob@email.com"));
     }
 
     // clear() positive
