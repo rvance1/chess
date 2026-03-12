@@ -2,6 +2,7 @@ package dataaccess.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import dataaccess.DatabaseManager;
@@ -37,6 +38,30 @@ public class MySqlUserDAO implements UserDAO {
 
     @Override
     public UserData getUser(String username) throws DataAccessException {
-        return null;
+
+        String sql = "SELECT username, password, email FROM user WHERE username=?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+                    String user = rs.getString("username");
+                    String password = rs.getString("password");
+                    String email = rs.getString("email");
+
+                    return new UserData(user, password, email);
+                }
+            }
+
+            return null;
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error retrieving user", e);
+        }
     }
+
 }
