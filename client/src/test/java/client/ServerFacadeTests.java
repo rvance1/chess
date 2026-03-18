@@ -106,4 +106,43 @@ public class ServerFacadeTests {
             facade.createGame("badAuthToken", "test game");
         });
     }
+
+    @Test
+    public void listGamesPositive() throws Exception {
+        var auth = facade.register("kevin", "password123", "kevin@email.com");
+        facade.createGame(auth.authToken(), "game1");
+        facade.createGame(auth.authToken(), "game2");
+
+        var games = facade.listGames(auth.authToken());
+
+        Assertions.assertNotNull(games);
+        Assertions.assertTrue(games.size() >= 2);
+    }
+
+    @Test
+    public void listGamesNegative() {
+        Assertions.assertThrows(ResponseException.class, () -> {
+            facade.listGames("badAuthToken");
+        });
+    }
+
+    @Test
+    public void joinGamePositive() throws Exception {
+        var auth = facade.register("kevin", "password123", "kevin@email.com");
+        int gameID = facade.createGame(auth.authToken(), "test game");
+
+        Assertions.assertDoesNotThrow(() -> {
+            facade.joinGame(auth.authToken(), "WHITE", gameID);
+        });
+    }
+
+    @Test
+    public void joinGameNegative() throws Exception {
+        var auth = facade.register("kevin", "password123", "kevin@email.com");
+        int gameID = facade.createGame(auth.authToken(), "test game");
+
+        Assertions.assertThrows(ResponseException.class, () -> {
+            facade.joinGame("badAuthToken", "WHITE", gameID);
+        });
+    }
 }

@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 
 import dto.CreateGameRequest;
 import dto.CreateGameResult;
+import dto.JoinGameRequest;
 import dto.ListGamesResult;
 import dto.LoginRequest;
 import exception.ResponseException;
@@ -68,7 +69,10 @@ public class ServerFacade {
     }
 
     public void joinGame(String authToken, String playerColor, int gameID) throws ResponseException {
-        throw new UnsupportedOperationException("Not implemented yet");
+        var joinGameRequest = new JoinGameRequest(playerColor, gameID);
+        var request = buildRequest("PUT", "/game", joinGameRequest, authToken);
+        var response = sendRequest(request);
+        handleResponse(response, null);
     }
 
     public void clear() throws ResponseException {
