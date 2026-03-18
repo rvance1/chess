@@ -1,13 +1,13 @@
 package client;
 
-import exception.ResponseException;
-import model.AuthData;
-import model.GameData;
-
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collection;
+
+import exception.ResponseException;
+import model.AuthData;
+import model.GameData;
 
 public class ServerFacade {
     private final HttpClient client = HttpClient.newHttpClient();
