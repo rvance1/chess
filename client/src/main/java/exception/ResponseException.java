@@ -8,8 +8,10 @@ import com.google.gson.Gson;
 public class ResponseException extends Exception {
 
     public enum Code {
-        ServerError,
-        ClientError,
+        BAD_REQUEST,
+        UNAUTHORIZED,
+        FORBIDDEN,
+        SERVER_ERROR
     }
 
     final private Code code;
@@ -34,18 +36,22 @@ public class ResponseException extends Exception {
         return code;
     }
 
-    public static Code fromHttpStatusCode(int httpStatusCode) {
-        return switch (httpStatusCode) {
-            case 500 -> Code.ServerError;
-            case 400 -> Code.ClientError;
-            default -> throw new IllegalArgumentException("Unknown HTTP status code: " + httpStatusCode);
+    public static Code fromHttpStatusCode(int statusCode) {
+        return switch (statusCode) {
+            case 400 -> Code.BAD_REQUEST;
+            case 401 -> Code.UNAUTHORIZED;
+            case 403 -> Code.FORBIDDEN;
+            case 500 -> Code.SERVER_ERROR;
+            default -> throw new IllegalArgumentException("Unknown HTTP status code: " + statusCode);
         };
     }
 
     public int toHttpStatusCode() {
         return switch (code) {
-            case ServerError -> 500;
-            case ClientError -> 400;
+            case BAD_REQUEST -> 400;
+            case UNAUTHORIZED -> 401;
+            case FORBIDDEN -> 403;
+            case SERVER_ERROR -> 500;
         };
     }
 }
