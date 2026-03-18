@@ -53,4 +53,41 @@ public class ServerFacadeTests {
         });
     }
 
+    @Test
+    public void loginPositive() throws Exception {
+        facade.register("kevin", "password123", "kevin@email.com");
+
+        var authData = facade.login("kevin", "password123");
+
+        Assertions.assertNotNull(authData);
+        Assertions.assertNotNull(authData.authToken());
+        Assertions.assertTrue(authData.authToken().length() > 10);
+    }
+
+    @Test
+    public void loginNegative() throws Exception {
+        facade.register("kevin", "password123", "kevin@email.com");
+
+        Assertions.assertThrows(ResponseException.class, () -> {
+            facade.login("kevin", "wrongPassword");
+        });
+    }
+
+    @Test
+    public void logoutPositive() throws Exception {
+        var authData = facade.register("kevin", "password123", "kevin@email.com");
+
+        Assertions.assertDoesNotThrow(() -> {
+            facade.logout(authData.authToken());
+        });
+    }
+
+    @Test
+    public void logoutNegative() throws Exception {
+        facade.register("kevin", "password123", "kevin@email.com");
+
+        Assertions.assertThrows(ResponseException.class, () -> {
+            facade.logout("badAuthToken");
+        });
+    }
 }

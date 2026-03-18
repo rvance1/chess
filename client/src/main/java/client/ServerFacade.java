@@ -11,6 +11,7 @@ import java.util.Collection;
 
 import com.google.gson.Gson;
 
+import dto.LoginRequest;
 import exception.ResponseException;
 import model.AuthData;
 import model.GameData;
@@ -36,11 +37,16 @@ public class ServerFacade {
     }
 
     public AuthData login(String username, String password) throws ResponseException {
-        throw new UnsupportedOperationException("Not implemented yet");
+        var loginRequest = new LoginRequest(username, password);
+        var request = buildRequest("POST", "/session", loginRequest, null);
+        var response = sendRequest(request);
+        return handleResponse(response, AuthData.class);
     }
 
     public void logout(String authToken) throws ResponseException {
-        throw new UnsupportedOperationException("Not implemented yet");
+        var request = buildRequest("DELETE", "/session", null, authToken);
+        var response = sendRequest(request);
+        handleResponse(response, null);
     }
 
     public int createGame(String authToken, String gameName) throws ResponseException {
