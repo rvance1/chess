@@ -90,4 +90,20 @@ public class ServerFacadeTests {
             facade.logout("badAuthToken");
         });
     }
+
+    @Test
+    public void createGamePositive() throws Exception {
+        var auth = facade.register("kevin", "password123", "kevin@email.com");
+
+        int gameID = facade.createGame(auth.authToken(), "test game");
+
+        Assertions.assertTrue(gameID > 0);
+    }
+
+    @Test
+    public void createGameNegative() throws Exception {
+        Assertions.assertThrows(ResponseException.class, () -> {
+            facade.createGame("badAuthToken", "test game");
+        });
+    }
 }

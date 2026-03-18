@@ -7,7 +7,6 @@ import dataaccess.AuthDAO;
 import dataaccess.GameDAO;
 import dto.CreateGameRequest;
 import dto.CreateGameResult;
-import dto.GameListItem;
 import dto.JoinGameRequest;
 import dto.ListGamesResult;
 import exception.DataAccessException;
@@ -38,14 +37,7 @@ public class GameService {
             }
 
             // 2) read all games
-            List<GameListItem> items = gameDAO.listGames().stream()
-                    .map(g -> new GameListItem(
-                            g.gameID(),
-                            g.whiteUsername(),
-                            g.blackUsername(),
-                            g.gameName()
-                    ))
-                    .toList();
+            List<GameData> items = gameDAO.listGames().stream().toList();
 
             // 3) return in expected wrapper
             return new ListGamesResult(items);

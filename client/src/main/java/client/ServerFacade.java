@@ -11,6 +11,9 @@ import java.util.Collection;
 
 import com.google.gson.Gson;
 
+import dto.CreateGameRequest;
+import dto.CreateGameResult;
+import dto.ListGamesResult;
 import dto.LoginRequest;
 import exception.ResponseException;
 import model.AuthData;
@@ -50,11 +53,18 @@ public class ServerFacade {
     }
 
     public int createGame(String authToken, String gameName) throws ResponseException {
-        throw new UnsupportedOperationException("Not implemented yet");
+        var createGameRequest = new CreateGameRequest(gameName);
+        var request = buildRequest("POST", "/game", createGameRequest, authToken);
+        var response = sendRequest(request);
+        var result = handleResponse(response, CreateGameResult.class);
+        return result.gameID();
     }
 
     public Collection<GameData> listGames(String authToken) throws ResponseException {
-        throw new UnsupportedOperationException("Not implemented yet");
+        var request = buildRequest("GET", "/game", null, authToken);
+        var response = sendRequest(request);
+        var result = handleResponse(response, ListGamesResult.class);
+        return result.games();
     }
 
     public void joinGame(String authToken, String playerColor, int gameID) throws ResponseException {
