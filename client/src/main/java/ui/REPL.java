@@ -9,6 +9,7 @@ public class REPL {
     private final PreloginClient preloginClient;
     private final PostloginClient postloginClient;
     private boolean loggedIn = false;
+    private boolean playing = false;
     private boolean running = true;
 
     public REPL(String serverUrl) {
