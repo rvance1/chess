@@ -27,14 +27,28 @@ public class PostloginClient {
     public String eval(String input) throws Exception {
         String trimmed = input.trim().toLowerCase();
 
-        if (trimmed.equals("help")) return help();
-        if (trimmed.equals("logout")) return logout();
-        if (trimmed.equals("quit")) return quit();
+        if (trimmed.equals("help")) {
+            return help();
+        }
+        if (trimmed.equals("logout")) {
+            return logout();
+        }
+        if (trimmed.equals("quit")) {
+            return quit();
+        }
 
-        if (trimmed.startsWith("create game")) return createGame(input);
-        if (trimmed.equals("list games")) return listGames();
-        if (trimmed.startsWith("play game")) return playGame(input);
-        if (trimmed.startsWith("observe game")) return observeGame(input);
+        if (trimmed.startsWith("create game")) {
+            return createGame(input);
+        }
+        if (trimmed.equals("list games")) {
+            return listGames();
+        }
+        if (trimmed.startsWith("play game")) {
+            return playGame(input);
+        }
+        if (trimmed.startsWith("observe game")) {
+            return observeGame(input);
+        }
 
         return "Unknown command. Type help.";
     }

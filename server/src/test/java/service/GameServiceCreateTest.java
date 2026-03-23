@@ -34,7 +34,7 @@ public class GameServiceCreateTest {
     private GameService gameService;
 
     @BeforeEach
-    void setUp() throws DataAccessException {
+    void setUpCreateTest() throws DataAccessException {
 
         userDAO = new MemoryUserDAO();
         authDAO = new MemoryAuthDAO();

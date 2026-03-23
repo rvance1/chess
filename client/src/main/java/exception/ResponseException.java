@@ -22,12 +22,22 @@ public class ResponseException extends Exception {
     }
 
     public String toJson() {
-        return new Gson().toJson(Map.of("message", getMessage(), "status", code));
+        return new Gson().toJson(Map.of(
+                "message", getMessage(),
+                "status", code(),
+                "statusCode", toHttpStatusCode()
+        ));
     }
 
     public static ResponseException fromJson(String json) {
         var map = new Gson().fromJson(json, HashMap.class);
-        var status = Code.valueOf(map.get("status").toString());
+        var statusValue = map.get("status");
+        Code status;
+        if (statusValue instanceof String) {
+            status = Code.valueOf(statusValue.toString());
+        } else {
+            status = fromHttpStatusCode(Integer.parseInt(statusValue.toString()));
+        }
         String message = map.get("message").toString();
         return new ResponseException(status, message);
     }

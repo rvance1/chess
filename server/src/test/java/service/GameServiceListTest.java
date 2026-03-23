@@ -28,7 +28,7 @@ public class GameServiceListTest {
     private GameDAO gameDAO;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUpListTest() throws Exception {
         userDAO = new MemoryUserDAO();
         authDAO = new MemoryAuthDAO();
         gameDAO = new MemoryGameDAO();
