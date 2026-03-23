@@ -1,7 +1,8 @@
 package ui;
 
-import client.ServerFacade;
 import java.util.Scanner;
+
+import client.ServerFacade;
 
 public class REPL {
     private final ServerFacade serverFacade;
@@ -55,5 +56,6 @@ public class REPL {
                 System.out.println("Error: " + ex.getMessage());
             }
         }
+        scanner.close();
     }
 }
