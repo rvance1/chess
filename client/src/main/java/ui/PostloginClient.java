@@ -1,12 +1,12 @@
 package ui;
 
-import client.ServerFacade;
-import model.AuthData;
-import model.GameData;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import client.ServerFacade;
+import model.AuthData;
+import model.GameData;
 
 public class PostloginClient {
     private final ServerFacade serverFacade;
@@ -109,11 +109,15 @@ public class PostloginClient {
 
     private String playGame(String input) throws Exception {
         String[] tokens = input.split("\\s+");
-        if (tokens.length < 4) {
+        if (tokens.length != 4) {
             return "Usage: play game <listNumber> <WHITE|BLACK>";
         }
 
         int listNumber = Integer.parseInt(tokens[2]);
+        if (listNumber < 1 || listNumber > lastListedGames.size()) {
+            return "Game does not exist.";
+        }
+
         String color = tokens[3].toUpperCase();
 
         GameData game = lastListedGames.get(listNumber - 1);
@@ -125,7 +129,7 @@ public class PostloginClient {
 
     private String observeGame(String input) {
         String[] tokens = input.split("\\s+");
-        if (tokens.length < 3) {
+        if (tokens.length != 3) {
             return "Usage: observe game <listNumber>";
         }
 

@@ -44,7 +44,7 @@ public class PreloginClient {
     }
 
     private String login(String[] tokens) throws Exception {
-        if (tokens.length < 3) {
+        if (tokens.length != 3) {
             return "Usage: login <username> <password>";
         }
 
@@ -53,7 +53,7 @@ public class PreloginClient {
     }
 
     private String register(String[] tokens) throws Exception {
-        if (tokens.length < 4) {
+        if (tokens.length != 4) {
             return "Usage: register <username> <password> <email>";
         }
 
