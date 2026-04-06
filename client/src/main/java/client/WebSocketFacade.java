@@ -1,13 +1,26 @@
 package client;
 
 import chess.ChessMove;
+import jakarta.websocket.ContainerProvider;
+import jakarta.websocket.EndpointConfig;
+import jakarta.websocket.MessageHandler;
+import jakarta.websocket.WebSocketContainer;
+
 import com.google.gson.Gson;
 import ui.GameplayClient;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
+import websocket.messages.ErrorMessage;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
+
+import static websocket.messages.ServerMessage.ServerMessageType.ERROR;
+import static websocket.messages.ServerMessage.ServerMessageType.LOAD_GAME;
+import static websocket.messages.ServerMessage.ServerMessageType.NOTIFICATION;
+
 import java.net.URI;
 
 public class WebSocketFacade extends Endpoint {
@@ -27,9 +40,26 @@ public class WebSocketFacade extends Endpoint {
     public void onOpen(Session session, EndpointConfig endpointConfig) {
         this.session = session;
 
-        session.addMessageHandler(String.class, message -> {
-            ServerMessage serverMessage = gson.fromJson(message, ServerMessage.class);
-            gameplayClient.notify(serverMessage);
+        session.addMessageHandler(new MessageHandler.Whole<String>() {
+            @Override
+            public void onMessage(String message) {
+                ServerMessage genericMessage = gson.fromJson(message, ServerMessage.class);
+
+                switch (genericMessage.getServerMessageType()) {
+                    case LOAD_GAME -> {
+                        LoadGameMessage loadMessage = gson.fromJson(message, LoadGameMessage.class);
+                        gameplayClient.notify(loadMessage);
+                    }
+                    case ERROR -> {
+                        ErrorMessage errorMessage = gson.fromJson(message, ErrorMessage.class);
+                        gameplayClient.notify(errorMessage);
+                    }
+                    case NOTIFICATION -> {
+                        NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);
+                        gameplayClient.notify(notificationMessage);
+                    }
+                }
+            }
         });
     }
 

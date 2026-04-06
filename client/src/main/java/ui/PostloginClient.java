@@ -130,7 +130,6 @@ public class PostloginClient {
         joinedGame = game;
         playerColor = color;
 
-        BoardPrinter.drawBoard(game, color.equals("BLACK"), null);
         return "Joined game " + game.gameName() + " as " + color;
     }
 
@@ -147,7 +146,6 @@ public class PostloginClient {
         joinedGame = game;
         playerColor = null;
 
-        BoardPrinter.drawBoard(game, false, null); 
         return "Observing game " + game.gameName();
     }
 
@@ -173,5 +171,11 @@ public class PostloginClient {
 
     public AuthData getAuthData() {
         return authData;
+    }
+
+    public void resetJoinState() {
+        joiningGame = false;
+        joinedGame = null;
+        playerColor = null;
     }
 }
