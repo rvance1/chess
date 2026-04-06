@@ -5,6 +5,7 @@ import chess.ChessMove;
 import chess.ChessPosition;
 import client.ServerFacade;
 import client.WebSocketFacade;
+import dto.ErrorMessage;
 import model.AuthData;
 import model.GameData;
 import websocket.messages.ServerMessage;
@@ -77,7 +78,7 @@ public class GameplayClient {
         }
 
         boolean blackPerspective = "BLACK".equals(playerColor);
-        BoardPrinter.drawBoard(game, blackPerspective);
+        BoardPrinter.drawBoard(blackPerspective);
         return "";
     }
 
@@ -154,18 +155,11 @@ public class GameplayClient {
     public void notify(ServerMessage message) {
         switch (message.getServerMessageType()) {
             case LOAD_GAME -> {
-                var loadGameMessage = (websocket.messages.LoadGameMessage) message;
-                this.game = loadGameMessage.getGame();
+                this.game = message.getGame();
                 redrawBoard();
             }
-            case NOTIFICATION -> {
-                var notificationMessage = (websocket.messages.NotificationMessage) message;
-                System.out.println(notificationMessage.getMessage());
-            }
-            case ERROR -> {
-                var errorMessage = (websocket.messages.ErrorMessage) message;
-                System.out.println(errorMessage.getErrorMessage());
-            }
+            case NOTIFICATION -> System.out.println(message.getMessage());
+            case ERROR -> System.out.println(message.getErrorMessage());
         }
     }
 
