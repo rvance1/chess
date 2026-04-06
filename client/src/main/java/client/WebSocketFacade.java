@@ -5,12 +5,7 @@ import java.net.URI;
 import com.google.gson.Gson;
 
 import chess.ChessMove;
-import jakarta.websocket.ContainerProvider;
-import jakarta.websocket.Endpoint;
-import jakarta.websocket.EndpointConfig;
-import jakarta.websocket.MessageHandler;
-import jakarta.websocket.Session;
-import jakarta.websocket.WebSocketContainer;
+import javax.websocket.*;
 import ui.GameplayClient;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
