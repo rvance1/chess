@@ -8,6 +8,7 @@ import client.WebSocketFacade;
 import dto.ErrorMessage;
 import model.AuthData;
 import model.GameData;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.ServerMessage;
 
 public class GameplayClient {
@@ -155,11 +156,18 @@ public class GameplayClient {
     public void notify(ServerMessage message) {
         switch (message.getServerMessageType()) {
             case LOAD_GAME -> {
-                this.game = message.getGame();
+                LoadGameMessage loadGameMessage = (LoadGameMessage) message;
+                this.game = loadGameMessage.getGame();
                 redrawBoard();
             }
-            case NOTIFICATION -> System.out.println(message.getMessage());
-            case ERROR -> System.out.println(message.getErrorMessage());
+            case NOTIFICATION -> {
+                NotificationMessage notificationMessage = (NotificationMessage) message;
+                System.out.println(notificationMessage.getMessage());
+            }
+            case ERROR -> {
+                ErrorMessage errorMessage = (ErrorMessage) message;
+                System.out.println(errorMessage.getErrorMessage());
+            }
         }
     }
 
