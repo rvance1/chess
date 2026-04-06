@@ -1,27 +1,23 @@
 package client;
 
-import chess.ChessMove;
-import jakarta.websocket.ContainerProvider;
-import jakarta.websocket.EndpointConfig;
-import jakarta.websocket.MessageHandler;
-import jakarta.websocket.WebSocketContainer;
+import java.net.URI;
 
 import com.google.gson.Gson;
+
+import chess.ChessMove;
+import jakarta.websocket.ContainerProvider;
+import jakarta.websocket.Endpoint;
+import jakarta.websocket.EndpointConfig;
+import jakarta.websocket.MessageHandler;
+import jakarta.websocket.Session;
+import jakarta.websocket.WebSocketContainer;
 import ui.GameplayClient;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
-import websocket.messages.ErrorMessage;
 import websocket.messages.ServerMessage;
-
-import javax.websocket.*;
-
-import static websocket.messages.ServerMessage.ServerMessageType.ERROR;
-import static websocket.messages.ServerMessage.ServerMessageType.LOAD_GAME;
-import static websocket.messages.ServerMessage.ServerMessageType.NOTIFICATION;
-
-import java.net.URI;
 
 public class WebSocketFacade extends Endpoint {
     private final GameplayClient gameplayClient;
