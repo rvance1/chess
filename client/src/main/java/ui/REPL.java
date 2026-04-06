@@ -3,11 +3,15 @@ package ui;
 import java.util.Scanner;
 
 import client.ServerFacade;
+import model.AuthData;
+import model.GameData;
 
 public class REPL {
     private final ServerFacade serverFacade;
     private final PreloginClient preloginClient;
     private final PostloginClient postloginClient;
+    private GameplayClient gameplayClient; // Removed 'final' so we can create it dynamically
+    
     private boolean loggedIn = false;
     private boolean playing = false;
     private boolean running = true;
@@ -16,6 +20,7 @@ public class REPL {
         this.serverFacade = new ServerFacade(serverUrl);
         this.preloginClient = new PreloginClient(serverFacade);
         this.postloginClient = new PostloginClient(serverFacade);
+        // Do not instantiate gameplayClient here; wait until the user joins a game.
     }
 
     public void run() {
@@ -24,7 +29,15 @@ public class REPL {
         System.out.println(preloginClient.help());
 
         while (running) {
-            System.out.print(loggedIn ? "[LOGGED_IN] >>> " : "[LOGGED_OUT] >>> ");
+            // Dynamically change the prompt based on the user's state
+            if (!loggedIn) {
+                System.out.print("[LOGGED_OUT] >>> ");
+            } else if (!playing) {
+                System.out.print("[LOGGED_IN] >>> ");
+            } else {
+                System.out.print("[GAMEPLAY] >>> ");
+            }
+            
             String input = scanner.nextLine();
 
             try {
@@ -40,7 +53,7 @@ public class REPL {
                     if (preloginClient.shouldQuit()) {
                         running = false;
                     }
-                } else {
+                } else if (!playing) {
                     String result = postloginClient.eval(input);
                     System.out.println(result);
 
@@ -49,12 +62,32 @@ public class REPL {
                         preloginClient.clearAuth();
                     }
 
+                    if (postloginClient.isJoiningGame()) {
+                        playing = true;
+                        
+                        AuthData auth = postloginClient.getAuthData();
+                        GameData game = postloginClient.getJoinedGame();
+                        String color = postloginClient.getPlayerColor(); 
+
+                        gameplayClient = new GameplayClient(serverFacade, auth, game, color);
+                        
+                        postloginClient.resetJoinState();
+                    }
+
                     if (postloginClient.shouldQuit()) {
                         running = false;
                     }
+                } else {
+                    String result = gameplayClient.eval(input);
+                    System.out.println(result);
+
+                    if (gameplayClient.hasLeftGame()) {
+                        playing = false;
+                        gameplayClient = null;
+                    }
                 }
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Error: " + ex.getMessage());
             }
         }
         scanner.close();

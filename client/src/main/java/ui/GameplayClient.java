@@ -163,11 +163,11 @@ public class GameplayClient {
             }
             case NOTIFICATION -> {
                 NotificationMessage notificationMessage = (NotificationMessage) message;
-                System.out.println(notificationMessage.getMessage());
+                System.out.println("\n" + notificationMessage.getMessage());
             }
             case ERROR -> {
                 ErrorMessage errorMessage = (ErrorMessage) message;
-                System.out.println(errorMessage.getErrorMessage());
+                System.out.println("\nError: " + errorMessage.getErrorMessage());
             }
         }
     }

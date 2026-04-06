@@ -14,6 +14,9 @@ public class PostloginClient {
     private boolean loggedOut = false;
     private boolean quit = false;
     private List<GameData> lastListedGames = new ArrayList<>();
+    private GameData joinedGame;
+    private String playerColor;
+    private boolean joiningGame;
 
     public PostloginClient(ServerFacade serverFacade) {
         this.serverFacade = serverFacade;
@@ -123,7 +126,11 @@ public class PostloginClient {
         GameData game = lastListedGames.get(listNumber - 1);
         serverFacade.joinGame(authData.authToken(), color, game.gameID());
 
-        BoardPrinter.drawBoard(color.equals("BLACK"));
+        joiningGame = true;
+        joinedGame = game;
+        playerColor = color;
+
+        BoardPrinter.drawBoard(game, color.equals("BLACK"), null);
         return "Joined game " + game.gameName() + " as " + color;
     }
 
@@ -136,7 +143,11 @@ public class PostloginClient {
         int listNumber = Integer.parseInt(tokens[2]);
         GameData game = lastListedGames.get(listNumber - 1);
 
-        BoardPrinter.drawBoard(false); // observer uses white perspective
+        joiningGame = true;
+        joinedGame = game;
+        playerColor = null;
+
+        BoardPrinter.drawBoard(game, false, null); 
         return "Observing game " + game.gameName();
     }
 
@@ -146,5 +157,21 @@ public class PostloginClient {
 
     public boolean shouldQuit() {
         return quit;
+    }
+
+    public boolean isJoiningGame() {
+        return joiningGame;
+    }
+
+    public GameData getJoinedGame() {
+        return joinedGame;
+    }
+
+    public String getPlayerColor() {
+        return playerColor;
+    }
+
+    public AuthData getAuthData() {
+        return authData;
     }
 }
