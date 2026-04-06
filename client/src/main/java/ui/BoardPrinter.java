@@ -33,11 +33,11 @@ import static ui.EscapeSequences.WHITE_ROOK;
 
 public class BoardPrinter {
 
-    public static void drawBoard(ChessGame game, boolean blackPerspective) {
+    public static void drawBoard(ChessGame game, boolean blackPerspective, ChessPosition highlightedPosition) {
         if (blackPerspective) {
-            drawBlackBoard(game, null);
+            drawBlackBoard(game, highlightedPosition);
         } else {
-            drawWhiteBoard(game, null);
+            drawWhiteBoard(game, highlightedPosition);
         }
     }
 

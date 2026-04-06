@@ -7,7 +7,9 @@ import client.ServerFacade;
 import client.WebSocketFacade;
 import model.AuthData;
 import model.GameData;
-import websocket.messages.*;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
 public class GameplayClient {
@@ -78,7 +80,7 @@ public class GameplayClient {
         }
 
         boolean blackPerspective = "BLACK".equals(playerColor);
-        BoardPrinter.drawBoard(blackPerspective);
+        BoardPrinter.drawBoard(game, blackPerspective, null);
         return "";
     }
 
@@ -129,7 +131,7 @@ public class GameplayClient {
         ChessPosition position = parsePosition(tokens[1]);
 
         boolean blackPerspective = "BLACK".equals(playerColor);
-        BoardPrinter.drawBoardWithHighlights(game, position, blackPerspective);
+        BoardPrinter.drawBoard(game, blackPerspective, position);
 
         return "";
     }
