@@ -1,7 +1,10 @@
 package ui;
 
+import java.util.Scanner;
+
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.ChessPiece;
 import chess.ChessPosition;
 import client.ServerFacade;
 import client.WebSocketFacade;
@@ -111,11 +114,43 @@ public class GameplayClient {
 
         ChessPosition start = parsePosition(tokens[1]);
         ChessPosition end = parsePosition(tokens[2]);
+        
+        // Check for promotion
+        ChessPiece.PieceType promotion = null;
+        if (isPromotionMove(start, end)) {
+            promotion = promptForPromotion(); 
+        }
 
-        ChessMove move = new ChessMove(start, end, null);
+        ChessMove move = new ChessMove(start, end, promotion);
         webSocketFacade.makeMove(authData.authToken(), gameData.gameID(), move);
 
-        return "";
+        return "Processing move..."; 
+    }
+
+    private boolean isPromotionMove(ChessPosition start, ChessPosition end) {
+        ChessPiece piece = game.getBoard().getPiece(start);
+        if (piece == null || piece.getPieceType() != ChessPiece.PieceType.PAWN) {
+            return false;
+        }
+        // Check if white reached row 8 or black reached row 1
+        return (piece.getTeamColor() == ChessGame.TeamColor.WHITE && end.getRow() == 8) ||
+            (piece.getTeamColor() == ChessGame.TeamColor.BLACK && end.getRow() == 1);
+    }
+
+    private ChessPiece.PieceType promptForPromotion() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.print("Pawn promotion! Choose a piece (Queen, Knight, Rook, Bishop): ");
+            String choice = scanner.nextLine().trim().toLowerCase();
+            
+            switch (choice) {
+                case "queen" -> { return ChessPiece.PieceType.QUEEN; }
+                case "knight" -> { return ChessPiece.PieceType.KNIGHT; }
+                case "rook" -> { return ChessPiece.PieceType.ROOK; }
+                case "bishop" -> { return ChessPiece.PieceType.BISHOP; }
+                default -> System.out.println("Invalid choice. Please try again.");
+            }
+        }
     }
 
     private String highlightMoves(String input) {
