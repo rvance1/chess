@@ -5,10 +5,9 @@ import chess.ChessMove;
 import chess.ChessPosition;
 import client.ServerFacade;
 import client.WebSocketFacade;
-import dto.ErrorMessage;
 import model.AuthData;
 import model.GameData;
-import websocket.messages.LoadGameMessage;
+import websocket.messages.*;
 import websocket.messages.ServerMessage;
 
 public class GameplayClient {
