@@ -200,7 +200,7 @@ public class ChessGame {
         if (checkMoves(position, ChessPiece.PieceType.KING, directionsBish, false)) {return true;}
         if (checkMoves(position, ChessPiece.PieceType.KING, directionsRook, false)) {return true;}
 
-        return checkMoves(position, ChessPiece.PieceType.PAWN, directionsPawn, true);
+        return checkMoves(position, ChessPiece.PieceType.PAWN, directionsPawn, false);
 
     }
 
