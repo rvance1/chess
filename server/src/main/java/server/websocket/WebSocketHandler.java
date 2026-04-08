@@ -77,10 +77,14 @@ public class WebSocketHandler implements Consumer<WsConfig> {
 
     private void connect(WsContext ctx, UserGameCommand command) throws Exception {
         AuthData auth = authDAO.getAuth(command.getAuthToken());
-        if (auth == null) throw new Exception("unauthorized");
+        if (auth == null) {
+            throw new Exception("unauthorized");
+        }
         
         GameData gameData = gameDAO.getGame(command.getGameID());
-        if (gameData == null) throw new Exception("game not found");
+        if (gameData == null) {
+            throw new Exception("game not found");
+        }
 
         gameConnections.computeIfAbsent(command.getGameID(), k -> ConcurrentHashMap.newKeySet()).add(ctx);
 
@@ -100,10 +104,14 @@ public class WebSocketHandler implements Consumer<WsConfig> {
 
     private void makeMove(WsContext ctx, MakeMoveCommand command) throws Exception {
         AuthData auth = authDAO.getAuth(command.getAuthToken());
-        if (auth == null) throw new Exception("unauthorized");
+        if (auth == null) {
+            throw new Exception("unauthorized");
+        }
         
         GameData gameData = gameDAO.getGame(command.getGameID());
-        if (gameData == null) throw new Exception("game not found");
+        if (gameData == null) {
+            throw new Exception("game not found");
+        }
 
         if (finishedGames.contains(command.getGameID())) {
             throw new Exception("game is already over");
@@ -146,7 +154,9 @@ public class WebSocketHandler implements Consumer<WsConfig> {
 
     private void leave(WsContext ctx, UserGameCommand command) throws Exception {
         AuthData auth = authDAO.getAuth(command.getAuthToken());
-        if (auth == null) throw new Exception("unauthorized");
+        if (auth == null) {
+            throw new Exception("unauthorized");
+        }
         
         GameData gameData = gameDAO.getGame(command.getGameID());
         
@@ -174,10 +184,14 @@ public class WebSocketHandler implements Consumer<WsConfig> {
 
     private void resign(WsContext ctx, UserGameCommand command) throws Exception {
         AuthData auth = authDAO.getAuth(command.getAuthToken());
-        if (auth == null) throw new Exception("unauthorized");
+        if (auth == null) {
+            throw new Exception("unauthorized");
+        }
         
         GameData gameData = gameDAO.getGame(command.getGameID());
-        if (gameData == null) throw new Exception("game not found");
+        if (gameData == null) {
+            throw new Exception("game not found");
+        }
 
         if (!auth.username().equals(gameData.whiteUsername()) && !auth.username().equals(gameData.blackUsername())) {
             throw new Exception("observers cannot resign");

@@ -7,38 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import dataaccess.AuthDAO;
-import dataaccess.GameDAO;
-import dataaccess.UserDAO;
-import dataaccess.memory.MemoryAuthDAO;
-import dataaccess.memory.MemoryGameDAO;
-import dataaccess.memory.MemoryUserDAO;
 import dto.CreateGameRequest;
 import dto.ListGamesResult;
 import exception.ServiceException;
 import model.UserData;
 
-public class GameServiceListTest {
-
-    private UserService userService;
-    private GameService gameService;
-
-    private UserDAO userDAO; 
-    private AuthDAO authDAO; 
-    private GameDAO gameDAO;
+public class GameServiceListTest extends GameServiceTestBase {
 
     @BeforeEach
     void setUpListTest() throws Exception {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
-        gameDAO = new MemoryGameDAO();
-
-        userDAO.clear();
-        authDAO.clear();
-        gameDAO.clear();
-        
-        userService = new UserService(userDAO, authDAO);
-        gameService = new GameService(authDAO, gameDAO);
+        super.setUp();
     }
 
     @Test
