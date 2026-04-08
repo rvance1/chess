@@ -2,10 +2,16 @@ package client;
 
 import java.net.URI;
 
+import javax.websocket.ContainerProvider;
+import javax.websocket.Endpoint;
+import javax.websocket.EndpointConfig;
+import javax.websocket.MessageHandler;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
+
 import com.google.gson.Gson;
 
 import chess.ChessMove;
-import javax.websocket.*;
 import ui.GameplayClient;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
@@ -19,14 +25,15 @@ public class WebSocketFacade extends Endpoint {
     private Session session;
     private final Gson gson = new Gson();
 
-    public WebSocketFacade(GameplayClient gameplayClient) throws Exception {
+    public WebSocketFacade(String serverUrl, GameplayClient gameplayClient) throws Exception {
         this.gameplayClient = gameplayClient;
-
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-        String url = "ws://localhost:8080/ws"; // replace if needed
-        this.session = container.connectToServer(this, URI.create(url));
+        
+        // Convert http://localhost:8080 to ws://localhost:8080/ws
+        String wsUrl = serverUrl.replace("http", "ws") + "/ws"; 
+        
+        this.session = container.connectToServer(this, URI.create(wsUrl));
     }
-
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
         this.session = session;
