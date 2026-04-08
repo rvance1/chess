@@ -26,13 +26,13 @@ public class GameplayClient {
     private ChessGame game;
     private boolean leftGame = false;
 
-    public GameplayClient(ServerFacade serverFacade, AuthData authData, GameData gameData, String playerColor) throws Exception {
+    public GameplayClient(String serverUrl, ServerFacade serverFacade, AuthData authData, GameData gameData, String playerColor) throws Exception {
         this.serverFacade = serverFacade;
         this.authData = authData;
         this.gameData = gameData;
         this.playerColor = playerColor;
 
-        this.webSocketFacade = new WebSocketFacade(this);
+        this.webSocketFacade = new WebSocketFacade(serverUrl, this);
 
         connect();
     }

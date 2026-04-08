@@ -11,12 +11,14 @@ public class REPL {
     private final PreloginClient preloginClient;
     private final PostloginClient postloginClient;
     private GameplayClient gameplayClient; // Removed 'final' so we can create it dynamically
+    private final String serverUrl;
     
     private boolean loggedIn = false;
     private boolean playing = false;
     private boolean running = true;
 
     public REPL(String serverUrl) {
+        this.serverUrl = serverUrl;
         this.serverFacade = new ServerFacade(serverUrl);
         this.preloginClient = new PreloginClient(serverFacade);
         this.postloginClient = new PostloginClient(serverFacade);
@@ -69,7 +71,7 @@ public class REPL {
                         GameData game = postloginClient.getJoinedGame();
                         String color = postloginClient.getPlayerColor(); 
 
-                        gameplayClient = new GameplayClient(serverFacade, auth, game, color);
+                        gameplayClient = new GameplayClient(serverUrl, serverFacade, auth, game, color);
                         
                         postloginClient.resetJoinState();
                     }
