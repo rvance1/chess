@@ -59,7 +59,7 @@ public class Server {
         UserHandler userHandler = new UserHandler(userService);
         SessionHandler sessionHandler = new SessionHandler(userService);
         GameHandler gameHandler = new GameHandler(gameService);
-        WebSocketHandler webSocketHandler = new WebSocketHandler();
+        WebSocketHandler webSocketHandler = new WebSocketHandler(gameService, userService);
 
         //Routes
         javalin.ws("/ws", webSocketHandler);
