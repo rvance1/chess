@@ -40,6 +40,7 @@ public class WebSocketHandler implements Consumer<WsConfig> {
         
         ws.onConnect(ctx -> {
             System.out.println("New WebSocket connection: " + ctx.sessionId());
+            ctx.session.setIdleTimeout(java.time.Duration.ofMinutes(5));
         });
 
         ws.onMessage(ctx -> {

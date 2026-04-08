@@ -28,8 +28,7 @@ public class WebSocketFacade extends Endpoint {
     public WebSocketFacade(String serverUrl, GameplayClient gameplayClient) throws Exception {
         this.gameplayClient = gameplayClient;
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-        
-        // Convert http://localhost:8080 to ws://localhost:8080/ws
+
         String wsUrl = serverUrl.replace("http", "ws") + "/ws"; 
         
         this.session = container.connectToServer(this, URI.create(wsUrl));
@@ -37,6 +36,8 @@ public class WebSocketFacade extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
         this.session = session;
+
+        this.session.setMaxIdleTimeout(300000);
 
         session.addMessageHandler(new MessageHandler.Whole<String>() {
             @Override
