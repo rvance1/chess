@@ -15,6 +15,7 @@ import handler.SessionHandler;
 import handler.UserHandler;
 import io.javalin.Javalin;
 import io.javalin.json.JavalinGson;
+import server.websocket.WebSocketHandler;
 import service.ClearService;
 import service.GameService;
 import service.UserService;
@@ -58,8 +59,10 @@ public class Server {
         UserHandler userHandler = new UserHandler(userService);
         SessionHandler sessionHandler = new SessionHandler(userService);
         GameHandler gameHandler = new GameHandler(gameService);
+        WebSocketHandler webSocketHandler = new WebSocketHandler();
 
         //Routes
+        javalin.ws("/ws", webSocketHandler);
         javalin.delete("/db", clearHandler::handle);
         javalin.post("/user", userHandler::register);
         javalin.post("/session", sessionHandler::login);
